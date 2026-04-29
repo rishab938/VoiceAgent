@@ -26,11 +26,13 @@ TOOL:add_task:item
 TOOL:list_tasks
 TOOL:delete_task:id
 TOOL:update_task:id:new
+TOOL:complete_task:id
 
 Examples:
 - "add milk" → TOOL:add_task:milk
 - "add task buy milk" → TOOL:add_task:buy milk
 - "add wheat, flour" → TOOL:add_task:wheat, flour
+- "mark task 1 as complete" → TOOL:complete_task:1
 
 User: {user_input}
 """
@@ -45,6 +47,8 @@ User: {user_input}
     elif decision.startswith("delete_task:"):
         decision = "TOOL:" + decision
     elif decision.startswith("update_task:"):
+        decision = "TOOL:" + decision
+    elif decision.startswith("complete_task:"):
         decision = "TOOL:" + decision
 
     # 🔹 ADD TASK
@@ -83,6 +87,15 @@ User: {user_input}
             return update_task(task_id, new_title)
         except:
             return "Invalid update format"
+
+    # 🔹 COMPLETE TASK
+    elif decision.startswith("TOOL:complete_task:"):
+        try:
+            from app.tools.todo_tools import mark_complete
+            task_id = int(decision.split("TOOL:complete_task:")[1])
+            return mark_complete(task_id)
+        except:
+            return "Invalid task ID"
 
     # 🔹 NORMAL RESPONSE
     else:
