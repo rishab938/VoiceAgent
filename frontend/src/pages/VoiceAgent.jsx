@@ -12,9 +12,11 @@ export default function VoiceAgent() {
   const audioChunksRef = useRef([]);
   const chatRef = useRef(null);
 
+  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
   const fetchData = async () => {
     try {
-      const res = await fetch("/data");
+      const res = await fetch(`${API_BASE}/data`);
       const data = await res.json();
       setTasks(data.tasks || []);
       setMemory(data.memory || []);
@@ -63,7 +65,7 @@ export default function VoiceAgent() {
 
       try {
         setMessages((prev) => [...prev, { role: "user", text: "..." }]);
-        const res = await fetch("/voice", {
+        const res = await fetch(`${API_BASE}/voice`, {
           method: "POST",
           body: formData,
         });
@@ -73,7 +75,7 @@ export default function VoiceAgent() {
           updated[updated.length - 1] = { role: "user", text: data.input_text };
           return [...updated, { role: "ai", text: data.response_text }];
         });
-        const audio = new Audio(`/audio/${data.audio_file}`);
+        const audio = new Audio(`${API_BASE}/audio/${data.audio_file}`);
         audio.play();
         fetchData();
       } catch (err) {

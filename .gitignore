@@ -2,12 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
-.venv/
 venv/
-ENV/
-env/
+.venv/
 .env
-*.log
 
 # Node
 node_modules/
@@ -18,8 +15,6 @@ build/
 # Project Specific
 backend/*.mp3
 backend/temp_*.webm
-frontend/voice-frontend/node_modules/
-frontend/voice-frontend/dist/
 
 # OS
 .DS_Store
