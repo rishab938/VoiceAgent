@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+edge-tts
+faster-whisper
+groq
+python-dotenv
+python-multipart

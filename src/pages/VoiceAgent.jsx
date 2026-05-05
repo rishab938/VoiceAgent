@@ -14,7 +14,7 @@ export default function VoiceAgent() {
 
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:8000/data");
+      const res = await fetch("/data");
       const data = await res.json();
       setTasks(data.tasks || []);
       setMemory(data.memory || []);
@@ -63,7 +63,7 @@ export default function VoiceAgent() {
 
       try {
         setMessages((prev) => [...prev, { role: "user", text: "..." }]);
-        const res = await fetch("http://localhost:8000/voice", {
+        const res = await fetch("/voice", {
           method: "POST",
           body: formData,
         });
@@ -73,7 +73,7 @@ export default function VoiceAgent() {
           updated[updated.length - 1] = { role: "user", text: data.input_text };
           return [...updated, { role: "ai", text: data.response_text }];
         });
-        const audio = new Audio(`http://localhost:8000/audio/${data.audio_file}`);
+        const audio = new Audio(`/audio/${data.audio_file}`);
         audio.play();
         fetchData();
       } catch (err) {
