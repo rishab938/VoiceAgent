@@ -12,7 +12,7 @@ export default function VoiceAgent() {
   const audioChunksRef = useRef([]);
   const chatRef = useRef(null);
 
-  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
   const fetchData = async () => {
     try {
@@ -75,8 +75,10 @@ export default function VoiceAgent() {
           updated[updated.length - 1] = { role: "user", text: data.input_text };
           return [...updated, { role: "ai", text: data.response_text }];
         });
-        const audio = new Audio(`${API_BASE}/audio/${data.audio_file}`);
-        audio.play();
+        if (data.audio_base64) {
+          const audio = new Audio("data:audio/mp3;base64," + data.audio_base64);
+          audio.play();
+        }
         fetchData();
       } catch (err) {
         console.error("Voice processing error:", err);
@@ -362,15 +364,15 @@ export default function VoiceAgent() {
                       fontSize: "10px", 
                       padding: "5px 12px", 
                       borderRadius: "10px", 
-                      background: task.status === "completed" ? "rgba(16, 185, 129, 0.1)" : "rgba(245, 158, 11, 0.1)",
-                      color: task.status === "completed" ? "#10B981" : "#F59E0B",
+                      background: task.completed ? "rgba(16, 185, 129, 0.1)" : "rgba(245, 158, 11, 0.1)",
+                      color: task.completed ? "#10B981" : "#F59E0B",
                       fontWeight: "900",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
-                      border: `1px solid ${task.status === "completed" ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`,
-                      boxShadow: `0 0 10px ${task.status === "completed" ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`
+                      border: `1px solid ${task.completed ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`,
+                      boxShadow: `0 0 10px ${task.completed ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`
                     }}>
-                      {task.status || "Pending"}
+                      {task.completed ? "Completed" : "Pending"}
                     </span>
                   </motion.div>
                 ))

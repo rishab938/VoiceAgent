@@ -20,6 +20,7 @@ STRICT RULES:
 - ONLY use tools for task-related commands
 - ALWAYS follow TOOL format
 - Keep responses SHORT (1 line)
+- ALWAYS respond in English
 
 Tool format:
 TOOL:add_task:item
